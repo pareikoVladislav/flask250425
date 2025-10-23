@@ -51,7 +51,7 @@ with DBConnector(engine) as session:
         "last_name": "Green",
         "email": "john.green@gmail.com",
         "password": "MySecurePassword",
-        "repeat_password": "MySecure123Password",
+        "repeat_password": "MySecurePassword",
         "phone": "+1 234 567 8901",
         "role_id": 3
     }"""
@@ -60,5 +60,6 @@ with DBConnector(engine) as session:
         created_user = create_user(session=session, raw_data=json_data)
 
         print("OUR USER WAS CREATED")
+        print(created_user)
     except Exception as err:
         print(f"ERROR: {err}")
