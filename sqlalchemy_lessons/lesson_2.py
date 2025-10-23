@@ -45,21 +45,40 @@ def create_user(session, raw_data):
         raise exc
 
 
+def get_user_by_id(session, user_id):
+    user = session.get(User, user_id)
+
+    if not user:
+        raise ValueError(
+            f"User with ID {user_id} not found"
+        )
+
+    return UserResponseSchema.model_validate(user)
+
+
 with DBConnector(engine) as session:
-    json_data = """{
-        "first_name": "John",
-        "last_name": "Green",
-        "email": "john.green@gmail.com",
-        "password": "MySecurePassword",
-        "repeat_password": "MySecurePassword",
-        "phone": "+1 234 567 8901",
-        "role_id": 3
-    }"""
+    # json_data = """{
+    #     "first_name": "John",
+    #     "last_name": "Green",
+    #     "email": "john.green@gmail.com",
+    #     "password": "MySecurePassword",
+    #     "repeat_password": "MySecurePassword",
+    #     "phone": "+1 234 567 8901",
+    #     "role_id": 3
+    # }"""
+    #
+    # try:
+    #     created_user = create_user(session=session, raw_data=json_data)
+    #
+    #     print("OUR USER WAS CREATED")
+    #     print(created_user)
+    # except Exception as err:
+    #     print(f"ERROR: {err}")
 
     try:
-        created_user = create_user(session=session, raw_data=json_data)
+        user = get_user_by_id(session=session, user_id=5)
 
-        print("OUR USER WAS CREATED")
-        print(created_user)
-    except Exception as err:
-        print(f"ERROR: {err}")
+        print("USER WAS FOUND")
+        print(user.model_dump_json(indent=4))
+    except ValueError as exc:
+        print(exc)
