@@ -8,7 +8,10 @@ def init_database(app: Flask) -> None:
 
 
 def register_routers(app: Flask) -> None:
-    ...
+    from src.routers.questions import questions_bp
+
+    app.register_blueprint(questions_bp)
+
 
 
 def create_app(app: Flask) -> None:
