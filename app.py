@@ -7,13 +7,9 @@ app = Flask(__name__)
 create_app(app)
 
 
-@app.route('/')
-def home_page():
-    return "Welcome to Community Pulse!"
-
-
 if __name__ == "__main__":
     app.run()
 
+#  Empty API {}
 
-# {}
+#  + 1 endpoint -> -> {"/": home_page}
