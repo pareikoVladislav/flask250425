@@ -4,6 +4,8 @@ from flask_migrate import Migrate
 from src.core.config import settings
 from src.core.db import db
 
+from src import models
+
 
 def init_database(app: Flask) -> None:
     db.init_app(app)

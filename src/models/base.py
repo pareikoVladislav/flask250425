@@ -2,10 +2,10 @@ from datetime import datetime, timezone
 
 from sqlalchemy import Integer, DateTime, func
 from sqlalchemy.orm import (
-    DeclarativeBase,
     mapped_column,
     Mapped
 )
+from src.core.db import db
 
 
 class TimestampMixin:
@@ -25,7 +25,7 @@ class TimestampMixin:
     )
 
 
-class Base(DeclarativeBase):
+class Base(db.Model):
     __abstract__ = True
 
     id: Mapped[int] = mapped_column(
