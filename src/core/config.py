@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     def database_url(self) -> str:
         return "mysql+pymysql://{user}:{password}@{host}:{port}/{db_name}".format(
             user=self.mysql_user,
-            password=self.mysql_password,
+            password=self.mysql_password.get_secret_value(),
             host=self.mysql_host,
             port=self.mysql_port,
             db_name=self.mysql_database

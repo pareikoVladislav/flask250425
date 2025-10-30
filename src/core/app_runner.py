@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_migrate import Migrate
 
 from src.core.config import settings
 from src.core.db import db
@@ -6,6 +7,8 @@ from src.core.db import db
 
 def init_database(app: Flask) -> None:
     db.init_app(app)
+    migrate = Migrate()
+    migrate.init_app(app, db)
 
 
 def register_routers(app: Flask) -> None:

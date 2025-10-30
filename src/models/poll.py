@@ -1,10 +1,10 @@
 from datetime import datetime
 from sqlalchemy import String, Text, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from src.models.base import Base
+from src.models.base import Base, TimestampMixin
 
 
-class Poll(Base):
+class Poll(Base, TimestampMixin):
     __tablename__ = 'polls'
 
     title: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -23,11 +23,11 @@ class Poll(Base):
         back_populates="poll",
         cascade="all, delete-orphan"
     )
-    statistics: Mapped["PollStatistics"] = relationship(
-        back_populates="poll",
-        uselist=False,  # One-to-One отношение
-        cascade="all, delete-orphan"
-    )
+    # statistics: Mapped["PollStatistics"] = relationship(
+    #     back_populates="poll",
+    #     uselist=False,  # One-to-One отношение
+    #     cascade="all, delete-orphan"
+    # )
 
 
 
@@ -40,4 +40,3 @@ class PollOption(Base):
     # Связи
     poll: Mapped["Poll"] = relationship(back_populates="options")
     votes: Mapped[list["Vote"]] = relationship(back_populates="option")
-
