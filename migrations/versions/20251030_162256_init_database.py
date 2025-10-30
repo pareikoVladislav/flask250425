@@ -1,8 +1,8 @@
 """Init Database
 
-Revision ID: c2d5cb3f35de
+Revision ID: ac339e5b2afc
 Revises: 
-Create Date: 2025-10-30 13:55:46.002944
+Create Date: 2025-10-30 16:22:56.122024
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c2d5cb3f35de'
+revision = 'ac339e5b2afc'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -26,6 +26,8 @@ def upgrade():
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('is_anonymous', sa.Boolean(), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('users',
@@ -33,6 +35,8 @@ def upgrade():
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('is_admin', sa.Boolean(), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('username')
     )
@@ -40,6 +44,8 @@ def upgrade():
     sa.Column('poll_id', sa.Integer(), nullable=False),
     sa.Column('text', sa.String(length=255), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
     sa.ForeignKeyConstraint(['poll_id'], ['polls.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -48,6 +54,8 @@ def upgrade():
     sa.Column('total_votes', sa.Integer(), nullable=False),
     sa.Column('unique_voters', sa.Integer(), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
     sa.ForeignKeyConstraint(['poll_id'], ['polls.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('poll_id')
@@ -58,6 +66,8 @@ def upgrade():
     sa.Column('votes_count', sa.Integer(), nullable=False),
     sa.Column('percentage', sa.Float(), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
     sa.ForeignKeyConstraint(['option_id'], ['poll_options.id'], ),
     sa.ForeignKeyConstraint(['poll_stats_id'], ['poll_statistics.id'], ),
     sa.PrimaryKeyConstraint('id')

@@ -1,10 +1,10 @@
 from datetime import datetime
 from sqlalchemy import String, Text, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from src.models.base import Base
+from src.models.base import Base, TimestampMixin
 
 
-class Poll(Base):
+class Poll(Base, TimestampMixin):
     __tablename__ = 'polls'
 
     title: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -31,7 +31,7 @@ class Poll(Base):
 
 
 
-class PollOption(Base):
+class PollOption(Base, TimestampMixin):
     __tablename__ = 'poll_options'
 
     poll_id: Mapped[int] = mapped_column(ForeignKey('polls.id'), nullable=False)

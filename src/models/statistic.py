@@ -1,9 +1,9 @@
 from sqlalchemy import ForeignKey, Integer, Float
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from src.models.base import Base
+from src.models.base import Base, TimestampMixin
 
 
-class PollStatistics(Base):
+class PollStatistics(Base, TimestampMixin):
     __tablename__ = 'poll_statistics'
 
     poll_id: Mapped[int] = mapped_column(
@@ -22,7 +22,7 @@ class PollStatistics(Base):
     )
 
 
-class OptionStatistics(Base):
+class OptionStatistics(Base, TimestampMixin):
     __tablename__ = 'option_statistics'
 
     poll_stats_id: Mapped[int] = mapped_column(

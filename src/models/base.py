@@ -33,3 +33,9 @@ class Base(db.Model):
         primary_key=True,
         autoincrement=True
     )
+
+    def to_dict(self):
+        return {
+            col.name: getattr(self, col.name)
+            for col in self.__table__.columns
+        }

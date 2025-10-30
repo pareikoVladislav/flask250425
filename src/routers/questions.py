@@ -1,6 +1,13 @@
-from flask import Blueprint
+from flask import Blueprint, request, jsonify
 from typing import Any
 
+from pydantic import ValidationError
+from sqlalchemy.exc import SQLAlchemyError
+
+from src.dtos.questions import PollCreateRequest, PollResponse
+from src.dtos.questions import PollOptionCreateRequest
+from src.models import Poll, PollOption
+from src.core.db import db
 
 questions_bp = Blueprint("questions", __name__, url_prefix='/questions')
 
@@ -24,8 +31,72 @@ def list_of_questions() -> list[dict[str, Any]]:
 
 # C
 @questions_bp.route('/create', methods=["POST"])
-def create_new_question() -> str:
-    return "New Question was created"
+def create_new_question():
+    try:
+        raw_data: dict[str, Any] = request.get_json()
+
+        if not raw_data:
+            return jsonify(
+                {
+                    "error": "Validation Error",
+                    "message": "Сырых даных не обнаружено"
+                }
+            ), 400  # BAD REQUEST
+
+        poll_data = PollCreateRequest.model_validate(raw_data)
+
+        options_data = poll_data.options
+        poll_dict: dict[str, Any] = poll_data.model_dump(exclude={'options'})
+
+        poll: Poll = Poll(**poll_dict)
+
+        db.session.add(poll)
+        db.session.flush()
+
+        for opt in options_data:  # type: PollOptionCreateRequest
+            option: PollOption = PollOption(
+                poll_id=poll.id,
+                text=opt.text
+            )
+
+            poll.options.append(option)
+
+        db.session.commit()
+
+        db.session.refresh(poll)
+
+        poll_response: dict[str, Any] = (
+            PollResponse
+            .model_validate(poll)
+            .model_dump()
+        )
+
+        return jsonify(
+            poll_response
+        ), 201
+
+    except ValidationError as exc:
+        return jsonify(
+            {
+                "error": "Validation Error",
+                "message": exc.errors()
+            }
+        ), 400  # BAD REQUEST
+    except SQLAlchemyError as exc:
+        db.session.rollback()
+        return jsonify(
+            {
+                "error": "DATABASE Error",
+                "message": str(exc)
+            }
+        ), 400  # BAD REQUEST
+    except Exception as exc:
+        return jsonify(
+            {
+                "error": "Unexpected Error",
+                "message": str(exc)
+            }
+        ), 500  # BAD REQUEST
 
 
 # R

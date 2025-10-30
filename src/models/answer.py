@@ -16,4 +16,4 @@ class Vote(Base, TimestampMixin):
     # Связи
     poll: Mapped["Poll"] = relationship(back_populates="votes")
     option: Mapped["PollOption"] = relationship(back_populates="votes")
-    # voter: Mapped["User"] = relationship(back_populates="votes")
+    voter: Mapped["User"] = relationship(back_populates="votes")
